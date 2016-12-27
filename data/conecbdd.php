@@ -3,15 +3,11 @@
  * Clase que envuelve una instancia de la clase PDO
  * para el manejo de la base de modelos
  */
-
 require_once 'conect.php';
-
-
 class ConexionBD
 {
-
     /**
-     * Única instancia de la clase
+     * ï¿½nica instancia de la clase
      */
     private static $db = null;
 
@@ -23,15 +19,14 @@ class ConexionBD
     final private function __construct()
     {
         try {
-            // Crear nueva conexión PDO
+            // Crear nueva conexiï¿½n PDO
             self::obtenerBD();
         } catch (PDOException $e) {
             // Manejo de excepciones
         }
     }
-
     /**
-     * Retorna en la única instancia de la clase
+     * Retorna en la ï¿½nica instancia de la clase
      * @return ConexionBD|null
      */
     public static function obtenerInstancia()
@@ -43,8 +38,8 @@ class ConexionBD
     }
 
     /**
-     * Crear una nueva conexión PDO basada
-     * en las constantes de conexión
+     * Crear una nueva conexiï¿½n PDO basada
+     * en las constantes de conexiï¿½n
      * @return PDO Objeto PDO
      */
     public function obtenerBD()
@@ -63,7 +58,7 @@ class ConexionBD
         return self::$pdo;
     }
     /**
-     * Evita la clonación del objeto
+     * Evita la clonaciï¿½n del objeto
      */
     final protected function __clone()
     {
@@ -74,5 +69,4 @@ class ConexionBD
         self::$pdo = null;
     }
 }
-
 ?>
