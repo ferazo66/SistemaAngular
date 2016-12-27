@@ -5,11 +5,19 @@ angular.module('app',[])
     .controller("ControllerUsuarios",function($scope, $http,upload) {
         var mostarlogin= false;
         var mostarNavBar=false;
-            $http.get("http://localhost/SistemaAngular/ws/consultaNavbar.php")
-                .success(function (data) {
-                    $scope.navBar=data.DatosNavBar;
-                    console.log('data' + $scope.navBar);
-                })
+        $scope.navbarOpciones=function (Id_perfil) {
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/consultaNavbar.php",
+                data: {
+                    Id_perfil:Id_perfil},
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+            request.success(function (data) {
+                $scope.navBar=data.DatosNavBar;
+                console.log('data' + $scope.navBar);
+            })
+        }
         $scope.usuariologin=function (Usuario,Contrasena) {
             var request=$http({
                 method: "POST",
@@ -24,12 +32,14 @@ angular.module('app',[])
                 $scope.resp=data.LOGUSER;
                 console.log( $scope.resp[0].Id_perfil);
                 if ($scope.resp[0].Id_perfil >= 1){
+                    $scope.perfil=$scope.resp[0].Id_perfil;
                     $scope.mostarNavBar=true;
                     $scope.mostarlogin=false;
+                    $scope.navbarOpciones($scope.perfil);
                 }else {
                     console.log('Usuario y contraseña incorrectos')
-
                 }
+
             });
         }
             $scope.showOpciones=function(show) {

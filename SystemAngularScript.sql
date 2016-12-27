@@ -10,7 +10,7 @@ CREATE TABLE Usuarios (
     Id_usuario INT NOT NULL AUTO_INCREMENT,
     Nombre VARCHAR(60) NOT NULL,
     Usuario VARCHAR(20) NOT NULL,
-    Contraseña VARCHAR(20) NOT NULL,
+    Contrasena VARCHAR(20) NOT NULL,
     Estado BOOLEAN NOT NULL,
     Id_perfil INT,
     PRIMARY KEY (Id_usuario),
@@ -28,22 +28,32 @@ CREATE TABLE Imagenes (
 );
 
 CREATE TABLE menus (
-    Cd_opcion INT AUTO_INCREMENT NOT NULL,
+    Id_opcion INT AUTO_INCREMENT NOT NULL,
     Opcion VARCHAR(20) NOT NULL,
     Estado BOOLEAN NOT NULL,
     Padre INT,
-    PRIMARY KEY (Cd_opcion)
+    PRIMARY KEY (Id_opcion)
+);
+CREATE TABLE relacion (
+    Id_relacion INT AUTO_INCREMENT NOT NULL,
+    Id_opcion INT,
+    Id_perfil INT,
+    PRIMARY KEY (Id_relacion),
+    FOREIGN KEY (Id_opcion)
+        REFERENCES menus (Id_opcion),
+    FOREIGN KEY (Id_perfil)
+        REFERENCES Perfiles (Id_perfil)
 );
 INSERT INTO menus
 values (1,"Menu Imagenes",1,null);
 INSERT INTO menus
 values (2,"Administracion de Imagenes",1,1);
 INSERT INTO menus
-values (4,"Administracion",1,null);
+values (3,"Administracion",1,null);
 INSERT INTO menus
-values (5,"Administracion de Usuarios",1,4);
+values (4,"Administracion de Usuarios",1,3);
 INSERT INTO menus
-values (6,"Administracion de Opciones",1,4);
+values (5,"Administracion de Opciones",1,3);
 INSERT INTO Perfiles
 values (1,"Administrador",true);
 INSERT INTO Perfiles
@@ -62,4 +72,19 @@ INSERT INTO Imagenes
 values (3,"descarga.jpg",true,1);
 INSERT INTO Imagenes
 values (4,"descarga(1).jpg",true,2);
+insert into relacion
+values(1,1,1);
+insert into relacion
+values(2,1,2);
+insert into relacion
+values(3,2,1);
+insert into relacion
+values(4,2,2);
+insert into relacion
+values(5,3,2);
+insert into relacion
+values(6,4,2);
+insert into relacion
+values(7,5,2);
+
  
