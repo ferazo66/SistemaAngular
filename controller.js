@@ -101,6 +101,22 @@ angular.module('app',[])
                 $scope.perfil=perfil;
                 console.log('prueba recargar'+$scope.perfil);
             }
+            $scope.CambioEstado=function (Id_usuario,Estado) {
+                if(Estado==1){
+                    Estado=0;
+                }else {
+                    Estado=1;
+                }
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/CambioEstado.php",
+                    data: {
+                        Id_usuario:Id_usuario,
+                        Estado: Estado
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+            }
         }
     )
     .directive('uploaderModel', ["$parse", function ($parse) {

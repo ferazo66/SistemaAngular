@@ -63,8 +63,8 @@
                     </div>
                 </div>
             </td>
-            <td ><button type="button" class="btn btn-danger btn-xs" ng-show="user.Estado==1">Desactivar </button>
-                <button type="button" class="btn btn-warning btn-xs" ng-show="user.Estado==0">Activar</button>
+            <td ><button type="button" class="btn btn-danger btn-xs" ng-show="user.Estado==1" ng-click="CambioEstado(user.Id_usuario,user.Estado)">Desactivar </button>
+                <button type="button" class="btn btn-warning btn-xs" ng-show="user.Estado==0" ng-click="CambioEstado(user.Id_usuario,user.Estado)">Activar</button>
             </td>
         </tr>
     </table>
