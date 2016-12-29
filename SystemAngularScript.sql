@@ -32,6 +32,7 @@ CREATE TABLE menus (
     Opcion VARCHAR(20) NOT NULL,
     Estado BOOLEAN NOT NULL,
     Padre INT,
+    Url VARCHAR(50),
     PRIMARY KEY (Id_opcion)
 );
 CREATE TABLE relacion (
@@ -45,15 +46,15 @@ CREATE TABLE relacion (
         REFERENCES Perfiles (Id_perfil)
 );
 INSERT INTO menus
-values (1,"Menu Imagenes",1,null);
+values (1,"Menu Imagenes",1,null,null);
 INSERT INTO menus
-values (2,"Administracion de Imagenes",1,1);
+values (2,"Imagenes",1,1,"AdministracionImagenes.html");
 INSERT INTO menus
-values (3,"Administracion",1,null);
+values (3,"Administracion",1,null,null);
 INSERT INTO menus
-values (4,"Administracion de Usuarios",1,3);
+values (4,"Usuarios",1,3,"AdministracionUsuarios.html");
 INSERT INTO menus
-values (5,"Administracion de Opciones",1,3);
+values (5,"Opciones",1,3,"AdministracionOpciones.html");
 INSERT INTO Perfiles
 values (1,"Administrador",true);
 INSERT INTO Perfiles

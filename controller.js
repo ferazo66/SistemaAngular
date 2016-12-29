@@ -5,6 +5,7 @@ angular.module('app',[])
     .controller("ControllerUsuarios",function($scope, $http,upload) {
         var mostarlogin= false;
         var mostarNavBar=false;
+        var mostarOpciones=false;
         $scope.navbarOpciones=function (Id_perfil) {
             var request=$http({
                 method: "POST",
@@ -39,15 +40,67 @@ angular.module('app',[])
                 }else {
                     console.log('Usuario y contraseña incorrectos')
                 }
-
             });
         }
             $scope.showOpciones=function(show) {
                 console.log(show);
                 $scope.mostarlogin=show;
-
             };
-
+            $scope.AdminUsuarios=function() {
+                var request=$http.get(
+                   "http://localhost/SistemaAngular/ws/Usuarios.php")
+                request.success(function (data) {
+                    $scope.users=data.DATOSUSUARIO;
+                    console.log('data' + $scope.users);
+                })
+            }
+            $scope.getPerfil=function () {
+                var request=$http.get(
+                    "http://localhost/SistemaAngular/ws/perfiles.php")
+                request.success(function (data) {
+                    $scope.perf=data.DATOSPERFIL;
+                    console.log('data' + $scope.perf);
+                })
+            }
+            $scope.nuevoUsuario=function (Nombre,Usuario,Contrasena,Estado) {
+                console.log('prueba recargar'+$scope.perfil);
+                console.log("prueba" + Nombre+ Usuario + Contrasena);
+                Id_perfil=$scope.perfil;
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/NuevoUsuario.php",
+                    data: {
+                        Nombre: Nombre,
+                        Usuario: Usuario,
+                        Contrasena: Contrasena,
+                        Estado: Estado,
+                        Id_perfil:Id_perfil
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+            }
+            $scope.ModificarUsuario=function (Id_usuario,Nombre,Usuario,Contrasena,Estado) {
+                console.log('prueba recargar'+$scope.perfil);
+                console.log("prueba" + Nombre+ Usuario + Contrasena);
+                Id_perfil=$scope.perfil;
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/ModificarUsuario.php",
+                    data: {
+                        Id_usuario:Id_usuario,
+                        Nombre: Nombre,
+                        Usuario: Usuario,
+                        Contrasena: Contrasena,
+                        Estado: Estado,
+                        Id_perfil: Id_perfil
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+            }
+            $scope.recargar=function (perfil) {
+                $scope.perfil=perfil;
+                console.log('prueba recargar'+$scope.perfil);
+            }
         }
     )
     .directive('uploaderModel', ["$parse", function ($parse) {

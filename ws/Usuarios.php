@@ -4,14 +4,9 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once '../data/conect.php';
 
 $conn = mysqli_connect(NOMBRE_HOST, USUARIO, CONTRASENA, BASE_DE_DATOS);
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-@$Id_perfil = $request->Id_perfil;
-@$pagina = $request->pagina;
-$pagina="errorLogin.php";
-
 $sql = "
-SELECT * from `menus` where Id_opcion in (SELECT Id_opcion FROM `relacion` WHERE Id_perfil='$Id_perfil') ";
+SELECT users.Id_usuario,users.Nombre,users.Usuario,users.Contrasena,users.Estado, per.Nombre as Perfil FROM usuarios as users, perfiles as per where users.Id_perfil=per.Id_perfil
+";
 if (mysqli_connect_errno()) {
     header('Content-type: application/json; charset=utf-8');
     echo json_encode(array(
@@ -20,18 +15,18 @@ if (mysqli_connect_errno()) {
     ));
 }
 $data = mysqli_query($conn, $sql);
-
 if ($data) {
     $outp = "";
     while ($row = mysqli_fetch_array($data)) {
         if ($outp != "") {$outp .= ",";}
-        $outp .= '{"Id_opcion":"'  .  $row['Id_opcion'] . '",';
-        $outp .= '"Opcion":"'   .  $row['Opcion']. '",';
+        $outp .= '{"Id_usuario":"'  .  $row['Id_usuario'] . '",';
+        $outp .= '"Nombre":"'   .  $row['Nombre']. '",';
+        $outp .= '"Usuario":"'   .  $row['Usuario']. '",';
+        $outp .= '"Contrasena":"'   .  $row['Contrasena']. '",';
         $outp .= '"Estado":"'   .  $row['Estado']. '",';
-        $outp .= '"Padre":"'   .  $row['Padre']. '",';
-        $outp .= '"Url":"'   .  $row['Url']. '"}';
+        $outp .= '"Perfil":"'   .  $row['Perfil']. '"}';
     }
-    $outp ='{"DatosNavBar":['.$outp.']}';
+    $outp ='{"DATOSUSUARIO":['.$outp.']}';
     $conn->close();
     echo($outp);
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>SistemaA>ngular</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.6/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../controller.js"></script>
+</head>
+<body ng-controller="ControllerUsuarios"  ng-init="AdminUsuarios()"ng-init="getPerfil()">
+<h1 class="text-center">Administracion de Usuarios</h1>
+<div class="container" >
+    <table class="table" class="text-center">
+        <tr>
+            <th>Id usuario</th>
+            <th>Nombre-Apellido</th>
+            <th>Usuario</th>
+            <th>Password</th>
+            <th>Estado</th>
+            <th>Perfil</th>
+            <th>Opciones</th>
+        </tr>
+        <tr ng-repeat="user in users" ng-model="usuario" >
+            <th>{{user.Id_usuario}}</th>
+            <th>{{user.Nombre}}</th>
+            <th>{{user.Usuario}}</th>
+            <th>{{user.Contrasena}}</th>
+            <th>{{user.Estado}}</th>
+            <th>{{user.Perfil}}</th>
+            <td ><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modalModificar{{user.Id_usuario}}" ng-click="getPerfil()">Modificar</button>
+                <div class="modal fade" id="modalModificar{{user.Id_usuario}}" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Usuario {{user.Nombre}}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Modificacion de Datos</h3>
+                                <label>Nombre</label><br>
+                                <input type="text" name="Nombre"placeholder="{{user.Nombre}}"ng-model="M_Nombre"><br>
+                                <label>Usuario</label><br>
+                                <input type="text" name="Usuario"placeholder="{{user.Usuario}}"ng-model="M_Usuario"><br>
+                                <label>Contraseña</label><br>
+                                <input type="text" name="Password"placeholder="{{user.Contrasena}}"ng-model="M_Password"><br>
+                                <label>Perfil</label><br>
+                                <select ng-model="perfil" ng-click="recargar(perfil)" >
+                                    <option value=" {{user.Id_perfil}}" selected="selected">Seleccione el Perfil</option>
+                                    <option ng-repeat="x in perf" value="{{x.Id_perfil}}">{{x.Nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ModificarUsuario(user.Id_usuario,M_Nombre,M_Usuario,M_Password,'1')" >Actualizar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td ><button type="button" class="btn btn-danger btn-xs" ng-show="user.Estado==1">Desactivar </button>
+                <button type="button" class="btn btn-warning btn-xs" ng-show="user.Estado==0">Activar</button>
+            </td>
+        </tr>
+    </table>
+    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalAgregar" ng-click="getPerfil()">Agregar Usuario</button>
+    <div class="modal fade" id="modalAgregar" role="dialog">
+        <div class="modal-dialog" class="">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Ingrese los Datos</h3>
+                    <label>Nombre</label><br>
+                    <input type="text" name="nombre"ng-model="A_Nombre"><br>
+                    <label>Usuario</label><br>
+                    <input type="text" name="Usuario"ng-model="A_Usuario"><br>
+                    <label>Contraseña</label><br>
+                    <input type="text" name="Password"ng-model="A_Password"><br>
+                    <label>Perfil</label><br>
+                    <select ng-model="perfil" ng-click="recargar(perfil)" >
+                        <option value="" selected="selected">Seleccione el Perfil  </option>
+                        <option ng-repeat="x in perf" value="{{x.Id_perfil}}">{{x.Nombre}}</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevoUsuario(A_Nombre,A_Usuario,A_Password,'1')">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

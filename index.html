@@ -12,7 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="controller.js"></script>
 </head>
-<body ng-controller="ControllerUsuarios" class="jumbotron text-center" >
+<body ng-controller="ControllerUsuarios" class="text-center" >
 <div class="navbar-wrapper">
     <div class="container-fluid">
         <nav class="navbar navbar-fixed-top">
@@ -32,7 +32,7 @@
                         <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre==0"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
                                 class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre">{{hijos.Opcion}}</a></li>
+                                <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre">{{hijos.Opcion}}</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -44,6 +44,9 @@
         </nav>
     </div>
 </div>
+<br>
+<br>
+
 <div ng-show="mostarlogin">
     <form action="checklogin.php" method="post" >
         <label>Nombre Usuario:</label><br>
@@ -55,5 +58,9 @@
         <input type="button" name="Submit" value="Ingresar" ng-click="usuariologin(username,password)">
     </form>
 </div>
+
+<section id="prueba" ng-show="">
+
+</section>
 </body>
 </html>
