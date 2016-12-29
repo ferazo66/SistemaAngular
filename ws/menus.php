@@ -4,15 +4,8 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once '../data/conect.php';
 
 $conn = mysqli_connect(NOMBRE_HOST, USUARIO, CONTRASENA, BASE_DE_DATOS);
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-@$Usuario = $request->Usuario;
-@$Contrasena=$request->Contrasena;
-@$pagina = $request->pagina;
-$pagina="errorLogin.php";
 $sql = "
-SELECT usuarios.Id_perfil FROM usuarios WHERE usuarios.Usuario='$Usuario' AND usuarios.Contrasena='$Contrasena' AND usuarios.Estado='1'
-";
+SELECT * FROM `menus`";
 if (mysqli_connect_errno()) {
     header('Content-type: application/json; charset=utf-8');
     echo json_encode(array(
@@ -25,9 +18,13 @@ if ($data) {
     $outp = "";
     while ($row = mysqli_fetch_array($data)) {
         if ($outp != "") {$outp .= ",";}
-        $outp .= '{"Id_perfil":"'  .  $row['Id_perfil'] . '"}';
+        $outp .= '{"Id_opcion":"'  .  $row['Id_opcion'] . '",';
+        $outp .= '"Opcion":"'   .  $row['Opcion']. '",';
+        $outp .= '"Estado":"'   .  $row['Estado']. '",';
+        $outp .= '"Padre":"'   .  $row['Padre']. '",';
+        $outp .= '"Url":"'   .  $row['Url']. '"}';
     }
-    $outp ='{"LOGUSER":['.$outp.']}';
+    $outp ='{"DATOSMENU":['.$outp.']}';
     $conn->close();
     echo($outp);
 }

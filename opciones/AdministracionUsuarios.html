@@ -17,21 +17,21 @@
 <div class="container" >
     <table class="table" class="text-center">
         <tr>
-            <th>Id usuario</th>
-            <th>Nombre-Apellido</th>
-            <th>Usuario</th>
-            <th>Password</th>
-            <th>Estado</th>
-            <th>Perfil</th>
-            <th>Opciones</th>
+            <td>Id usuario</td>
+            <td>Nombre-Apellido</td>
+            <td>Usuario</td>
+            <td>Password</td>
+            <td>Estado</td>
+            <td>Perfil</td>
+            <td>Opciones</td>
         </tr>
         <tr ng-repeat="user in users" ng-model="usuario" >
-            <th>{{user.Id_usuario}}</th>
-            <th>{{user.Nombre}}</th>
-            <th>{{user.Usuario}}</th>
-            <th>{{user.Contrasena}}</th>
-            <th>{{user.Estado}}</th>
-            <th>{{user.Perfil}}</th>
+            <td>{{user.Id_usuario}}</td>
+            <td>{{user.Nombre}}</td>
+            <td>{{user.Usuario}}</td>
+            <td>{{user.Contrasena}}</td>
+            <td>{{user.Estado}}</td>
+            <td>{{user.Perfil}}</td>
             <td ><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modalModificar{{user.Id_usuario}}" ng-click="getPerfil()">Modificar</button>
                 <div class="modal fade" id="modalModificar{{user.Id_usuario}}" role="dialog">
                     <div class="modal-dialog">

@@ -11,7 +11,7 @@ $request = json_decode($postdata);
 $pagina="errorLogin.php";
 
 $sql = "
-SELECT * from `menus` where Id_opcion in (SELECT Id_opcion FROM `relacion` WHERE Id_perfil='$Id_perfil') ";
+SELECT * from `menus` where Estado=1 AND Id_opcion in (SELECT Id_opcion FROM `relacion` WHERE Id_perfil='$Id_perfil') ";
 if (mysqli_connect_errno()) {
     header('Content-type: application/json; charset=utf-8');
     echo json_encode(array(

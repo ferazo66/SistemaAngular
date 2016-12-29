@@ -117,6 +117,71 @@ angular.module('app',[])
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
             }
+            $scope.getMenu=function () {
+                var request=$http.get(
+                    "http://localhost/SistemaAngular/ws/menus.php")
+                request.success(function (data) {
+                    $scope.menus=data.DATOSMENU;
+                    console.log('data' + $scope.menus);
+                })
+            }
+        $scope.nuevaOpcion=function (Opcion,Estado,Padre,Padre1,Url) {
+                console.log(Url);
+            if(Padre==1){
+                Padre=null;
+            }else{
+                Padre=Padre1;
+            }
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/NuevaOpcion.php",
+                data: {
+                    Opcion: Opcion,
+                    Estado: Estado,
+                    Padre:Padre,
+                    Url: Url
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
+        }
+        $scope.ModificarOpcion=function (Id_opcion,Opcion,Estado,Padre,Padre1,Url) {
+                console.log('moOP'+Id_opcion+Opcion+Estado+Padre+Padre1+Url);
+            if(Padre==1){
+                Padre=null;
+            }else{
+                Padre=Padre1;
+            }
+            console.log('moOP'+Id_opcion+Opcion,Estado,Padre,Url);
+
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/ModificarOpciones.php",
+                data: {
+                    Id_opcion:Id_opcion,
+                    Opcion: Opcion,
+                    Estado: Estado,
+                    Padre:Padre,
+                    Url: Url
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        }
+        $scope.CambioEstadoOpcion=function (Id_opcion,Estado) {
+            if(Estado==1){
+                Estado=0;
+            }else {
+                Estado=1;
+            }
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/CambioEstadoOpcion.php",
+                data: {
+                    Id_opcion:Id_opcion,
+                    Estado: Estado
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        }
         }
     )
     .directive('uploaderModel', ["$parse", function ($parse) {
