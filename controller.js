@@ -182,8 +182,26 @@ angular.module('app',[])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         }
+        $scope.nuevaRelacion=function (Id_opcion,Id_perfil) {
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/NuevaRelacion.php",
+                data: {
+                    Id_opcion: Id_opcion,
+                    Id_perfil: Id_perfil
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            })
         }
-    )
+        $scope.getRelacion=function () {
+            var request=$http.get(
+                "http://localhost/SistemaAngular/ws/relaciones.php")
+            request.success(function (data) {
+                $scope.relacion=data.DATOSRELACION;
+                console.log('data' + $scope.relacion);
+            })
+        }
+    })
     .directive('uploaderModel', ["$parse", function ($parse) {
         return {
             restrict: 'A',

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>SistemaA AngulaR</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.6/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../controller.js"></script>
+</head>
+<body ng-controller="ControllerUsuarios" ng-init="getPerfil()" >
+<h1 class="text-center">Administracion de Perfiles</h1>
+<div class="container">
+    <table class="table" class="text-center"ng-init="getRelacion()">
+        <tr>
+            <td>Id Perfil</td>
+            <td>Perfil</td>
+            <td>Estado</td>
+            <td>Opciones</td>
+        </tr>
+        <tr ng-repeat="perfil in perf" ng-model="Perfil" >
+            <td>{{perfil.Id_perfil}}</td>
+            <td  data-toggle="collapse"href="#collapseMenu{{perfil.Id_perfil}}" ng-click="getRelacion()">{{perfil.Nombre}}
+            <div id="collapseMenu{{perfil.Id_perfil}}" class="panel-collapse collapse">
+                <div class="panel-body"ng-repeat="opcionesRelacion in relacion" data-toggle="collapse"ng-show=" opcionesRelacion.Id_perfil==perfil.Id_perfil">{{opcionesRelacion.Opcion}}
+                    <div class="panel-footer"ng-repeat="hijos in relacion" ng-show="opcionesRelacion.Id_opcion==hijos.Padre"><h6> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{hijos.Opcion}}</h6>
+                    </div>
+                </div>
+            </div>
+            </td>
+            <td>{{perfil.Estado}}</td>
+            <td ><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modalModificar{{op.Id_opcion}}" >Modificar</button>
+                <div class="modal fade" id="modalModificar{{op.Id_opcion}}" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Opcion {{perfil.Opcion}}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Modificar Perfiles</h3>
+                                <label>Opcion</label><br>
+                                <input type="text" name="Nombre"placeholder="{{perfil.Nombre}}"ng-model="M_Perfil"><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ModificarOpcion(perfil.Id_perfil,M_Perfil,perfil.Estado)" >Actualizar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td ><button type="button" class="btn btn-danger btn-xs" ng-show="perfil.Estado==1" ng-click="CambioEstadoOpcion(perfil.Id_perfil,perfil.Estado)">Desactivar </button>
+                <button type="button" class="btn btn-warning btn-xs" ng-show="perfil.Estado==0" ng-click="CambioEstadoOpcion(perfil.Id_perfil,perfil.Estado)">Activar</button>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalAgregar" ng-click="getPerfil()">Agregar Opciones</button>
+    <div class="modal fade" id="modalAgregar" role="dialog">
+        <div class="modal-dialog" class="">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Perfiles</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Ingrese los Datos</h3>
+                    <label>Opcion</label><br>
+                    <input type="text" name="nombre"ng-model="A_Opcion"><br>
+                    <label>Ubicacion</label><br>
+                    <input type="text" name="Usuario"ng-model="A_Ubicacion"><br>
+                    <form>
+                        Es Padre:
+                        <input type="radio" ng-model="opciones" value="1">Si
+                        <input type="radio" ng-model="opciones" value="2">No
+                    </form>
+                    <label ng-show="opciones==2" >Menu Hijos</label><br>
+                    <select ng-model="opciones1"ng-show="opciones==2" >
+                        <option value=" " selected="selected">Seleccione el Padre</option>
+                        <option ng-repeat="x in menus" value="{{x.Id_opcion}}"ng-show="x.Padre==''|| x.Padre==0">{{x.Opcion}}</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevaOpcion(A_Opcion,'1',opciones,opciones1,A_Ubicacion)">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div> <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalAsignar" ng-click="getPerfil()">Asignar Opciones</button>
+    <div class="modal fade" id="modalAsignar" role="dialog">
+        <div class="modal-dialog" class="">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Asignar Opciones</h4>
+                </div>
+                <div class="modal-body">
+                   <h3>Seleccione el perfil</h3>
+                    <select ng-model="opPerfil" ng-click="getMenu()">
+                        <option value=" " selected="selected" >Seleccione Perfil</option>
+                        <option ng-repeat="x in perf" value="{{x.Id_perfil}}">{{x.Nombre}}</option>
+                    </select><h3>Seleccione la opcion</h3>
+                    <select ng-model="opMenu" >
+                        <option value=" " selected="selected">Seleccione Opciones</option>
+                        <option ng-repeat="y in menus" value="{{y.Id_opcion}}">{{y.Opcion}}</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevaRelacion(y.Id_opcion,x.Id_Perfil)">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
