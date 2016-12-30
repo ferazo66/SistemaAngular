@@ -27,7 +27,7 @@
             <td  data-toggle="collapse"href="#collapseMenu{{perfil.Id_perfil}}" ng-click="getRelacion()">{{perfil.Nombre}}
             <div id="collapseMenu{{perfil.Id_perfil}}" class="panel-collapse collapse">
                 <div class="panel-body"ng-repeat="opcionesRelacion in relacion" data-toggle="collapse"ng-show=" opcionesRelacion.Id_perfil==perfil.Id_perfil">{{opcionesRelacion.Opcion}}
-                    <div class="panel-footer"ng-repeat="hijos in relacion" ng-show="opcionesRelacion.Id_opcion==hijos.Padre"><h6> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{hijos.Opcion}}</h6>
+                    <div class="panel-footer"ng-repeat="hijos in relacion" ng-show="opcionesRelacion.Id_opcion==hijos.Padre"><h6> &nbsp;&nbsp;&nbsp;&nbsp;{{hijos.Opcion}}</h6>
                     </div>
                 </div>
             </div>
