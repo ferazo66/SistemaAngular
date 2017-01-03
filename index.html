@@ -28,7 +28,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse" >
                     <ul class="nav navbar-nav"  ng-show="mostarNavBar">
-                        <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre==0"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
+                        <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre=='0'"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
                                 class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre">{{hijos.Opcion}}</a></li>

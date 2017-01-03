@@ -201,6 +201,35 @@ angular.module('app',[])
                 console.log('data' + $scope.relacion);
             })
         }
+        $scope.CambioEstadoPerfil=function (Id_perfil,Estado){
+                console.log(Id_perfil+Estado);
+            if(Estado==1){
+                Estado=0;
+            }else {
+                Estado=1;
+            }
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/CambioEstadoPerfil.php",
+                data: {
+                    Id_perfil:Id_perfil,
+                    Estado: Estado
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        }
+        $scope.ModificarPerfil=function (Id_perfil,Nombre,Estado) {
+            var request=$http({
+                method: "POST",
+                url: "http://localhost/SistemaAngular/ws/ModificarPerfil.php",
+                data: {
+                    Id_perfil:Id_perfil,
+                    Nombre: Nombre,
+                    Estado: Estado
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+        }
     })
     .directive('uploaderModel', ["$parse", function ($parse) {
         return {
