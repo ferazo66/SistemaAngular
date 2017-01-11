@@ -6,12 +6,10 @@ require_once '../data/conect.php';
 $conn = mysqli_connect(NOMBRE_HOST, USUARIO, CONTRASENA, BASE_DE_DATOS);
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-@$Id_perfil = $request->Id_perfil;
-@$pagina = $request->pagina;
+@$Id_usuario = $request->Id_usuario;
 $pagina="errorLogin.php";
-
 $sql = "
-SELECT * from `menus` where Estado=1 AND Id_opcion in (SELECT Id_opcion FROM `relacion` WHERE Id_perfil='$Id_perfil')
+SELECT ima.Id_imagen,ima.Direccion,ima.Estado,ima.Id_usuario,us.Nombre FROM imagenes AS ima , usuarios AS us WHERE ima.Id_usuario=us.Id_usuario AND us.Id_usuario='$Id_usuario' AND ima.Estado='1'
 ";
 if (mysqli_connect_errno()) {
     header('Content-type: application/json; charset=utf-8');
@@ -21,18 +19,17 @@ if (mysqli_connect_errno()) {
     ));
 }
 $data = mysqli_query($conn, $sql);
-
 if ($data) {
     $outp = "";
     while ($row = mysqli_fetch_array($data)) {
         if ($outp != "") {$outp .= ",";}
-        $outp .= '{"Id_opcion":"'  .  $row['Id_opcion'] . '",';
-        $outp .= '"Opcion":"'   .  $row['Opcion']. '",';
+        $outp .= '{"Id_imagen":"'  .  $row['Id_imagen'] . '",';
+        $outp .= '"Direccion":"'   .  $row['Direccion']. '",';
         $outp .= '"Estado":"'   .  $row['Estado']. '",';
-        $outp .= '"Padre":"'   .  $row['Padre']. '",';
-        $outp .= '"Url":"'   .  $row['Url']. '"}';
+        $outp .= '"Id_usuario":"'   .  $row['Id_usuario']. '",';
+        $outp .= '"Nombre":"'   .  $row['Nombre']. '"}';
     }
-    $outp ='{"DatosNavBar":['.$outp.']}';
+    $outp ='{"DATOSIMAGEN":['.$outp.']}';
     $conn->close();
     echo($outp);
 }

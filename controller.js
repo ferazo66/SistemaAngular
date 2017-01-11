@@ -2,10 +2,16 @@
  * Created by ferazo on 23/12/2016.
  */
 angular.module('app',[])
-    .controller("ControllerUsuarios",function($scope, $http,upload) {
+    .controller("ControllerUsuarios",function($scope, $http,$window,upload) {
         var mostarlogin= false;
         var mostarNavBar=false;
         var mostarOpciones=false;
+        var carrusel=false;
+        var Id_usuario=0;
+        var usuario=Id_usuario;
+        var Direccion= " ";
+        var Estado=true;
+        var perfil=0;
         $scope.navbarOpciones=function (Id_perfil) {
             var request=$http({
                 method: "POST",
@@ -29,18 +35,57 @@ angular.module('app',[])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
             request.success(function (data) {
-
                 $scope.resp=data.LOGUSER;
-                console.log( $scope.resp[0].Id_perfil);
-                if ($scope.resp[0].Id_perfil >= 1){
-                    $scope.perfil=$scope.resp[0].Id_perfil;
-                    $scope.mostarNavBar=true;
-                    $scope.mostarlogin=false;
-                    $scope.navbarOpciones($scope.perfil);
+                if($scope.resp==''||$scope.resp==null||$scope.resp=='0'||$scope.resp.length<0){
+                    console.log('Usuario y contraseña incorrectos');
+                    $scope.errorLog=true;
                 }else {
-                    console.log('Usuario y contraseña incorrectos')
+                    console.log($scope.resp[0].Id_perfil);
+                    if ($scope.resp[0].Id_perfil >= 1) {
+                        $scope.perfil = $scope.resp[0].Id_perfil;
+                        $scope.mostarNavBar = true;
+                        $scope.mostarlogin = false;
+                        $scope.navbarOpciones($scope.perfil);
+                        $scope.correctLog = true;
+                        $scope.Id_usuario=$scope.resp[0].Id_usuario;
+                        console.log('log'+ $scope.Id_usuario);
+                        var request=$http({
+                            method: "POST",
+                            url: "http://localhost/SistemaAngular/ws/sesion.php",
+                            data: {
+                                Id_usuario: $scope.Id_usuario,
+                                Id_perfil:$scope.perfil
+                            },
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        });
+                        console.log('login'+ $scope.Id_usuario);
+                        console.log('login'+ $scope.perfil);
+                    }
                 }
+
             });
+        }
+        $scope.navbarpaginas=function () {
+            var requestperf = $http.get(
+                "http://localhost/SistemaAngular/ws/sesionlog.php")
+            requestperf.success(function (data) {
+                $scope.usuario = data.DATOSSESION[0].Id_usuario;
+                console.log('data  ' + $scope.usuario);
+                $scope.perfil = data.DATOSSESION[0].Id_perfil;
+                $scope.mostarNavBar = true;
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/consultaNavbar.php",
+                    data: {
+                        Id_perfil:$scope.perfil
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                request.success(function (data) {
+                    $scope.navBar=data.DatosNavBar;
+                    console.log('data' + $scope.navBar);
+                });
+            })
         }
             $scope.showOpciones=function(show) {
                 console.log(show);
@@ -77,7 +122,12 @@ angular.module('app',[])
                         Id_perfil:Id_perfil
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+
                 })
+
+                $window.location.reload();
+                $scope.correctcrea=true;
+
             }
             $scope.ModificarUsuario=function (Id_usuario,Nombre,Usuario,Contrasena,Estado) {
                 console.log('prueba recargar'+$scope.perfil);
@@ -96,6 +146,8 @@ angular.module('app',[])
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
+                $window.location.reload();
+                $scope.correctact=true;
             }
             $scope.recargar=function (perfil) {
                 $scope.perfil=perfil;
@@ -116,6 +168,18 @@ angular.module('app',[])
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
+                request = $http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/subirArchivos.php",
+                    data: {
+                        Direccion: Direccion,
+                        Estado: Estado,
+                        Id_usuario: Id_usuario
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+                $window.location.reload();
+
             }
             $scope.getMenu=function () {
                 var request=$http.get(
@@ -125,111 +189,192 @@ angular.module('app',[])
                     console.log('data' + $scope.menus);
                 })
             }
-        $scope.nuevaOpcion=function (Opcion,Estado,Padre,Padre1,Url) {
-                console.log(Url);
-            if(Padre==1){
-                Padre=null;
-            }else{
-                Padre=Padre1;
-            }
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/NuevaOpcion.php",
-                data: {
-                    Opcion: Opcion,
-                    Estado: Estado,
-                    Padre:Padre,
-                    Url: Url
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            })
-        }
-        $scope.ModificarOpcion=function (Id_opcion,Opcion,Estado,Padre,Padre1,Url) {
-                console.log('moOP'+Id_opcion+Opcion+Estado+Padre+Padre1+Url);
-            if(Padre==1){
-                Padre=null;
-            }else{
-                Padre=Padre1;
-            }
-            console.log('moOP'+Id_opcion+Opcion,Estado,Padre,Url);
+            $scope.nuevaOpcion=function (Opcion,Estado,Padre,Padre1,Url) {
+                    console.log(Url);
+                if(Padre==1){
+                    Padre=null;
+                }else{
+                    Padre=Padre1;
+                }
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/NuevaOpcion.php",
+                    data: {
+                        Opcion: Opcion,
+                        Estado: Estado,
+                        Padre:Padre,
+                        Url: Url
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
 
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/ModificarOpciones.php",
-                data: {
-                    Id_opcion:Id_opcion,
-                    Opcion: Opcion,
-                    Estado: Estado,
-                    Padre:Padre,
-                    Url: Url
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-        }
-        $scope.CambioEstadoOpcion=function (Id_opcion,Estado) {
-            if(Estado==1){
-                Estado=0;
-            }else {
-                Estado=1;
             }
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/CambioEstadoOpcion.php",
-                data: {
-                    Id_opcion:Id_opcion,
-                    Estado: Estado
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-        }
-        $scope.nuevaRelacion=function (Id_opcion,Id_perfil) {
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/NuevaRelacion.php",
-                data: {
-                    Id_opcion: Id_opcion,
-                    Id_perfil: Id_perfil
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            })
-        }
-        $scope.getRelacion=function () {
-            var request=$http.get(
-                "http://localhost/SistemaAngular/ws/relaciones.php")
-            request.success(function (data) {
-                $scope.relacion=data.DATOSRELACION;
-                console.log('data' + $scope.relacion);
-            })
-        }
-        $scope.CambioEstadoPerfil=function (Id_perfil,Estado){
-                console.log(Id_perfil+Estado);
-            if(Estado==1){
-                Estado=0;
-            }else {
-                Estado=1;
+            $scope.ModificarOpcion=function (Id_opcion,Opcion,Estado,Padre,Padre1,Url) {
+                    console.log('moOP'+Id_opcion+Opcion+Estado+Padre+Padre1+Url);
+                if(Padre==1){
+                    Padre=null;
+                }else{
+                    Padre=Padre1;
+                }
+                console.log('moOP'+Id_opcion+Opcion,Estado,Padre,Url);
+
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/ModificarOpciones.php",
+                    data: {
+                        Id_opcion:Id_opcion,
+                        Opcion: Opcion,
+                        Estado: Estado,
+                        Padre:Padre,
+                        Url: Url
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+
             }
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/CambioEstadoPerfil.php",
-                data: {
-                    Id_perfil:Id_perfil,
-                    Estado: Estado
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-        }
-        $scope.ModificarPerfil=function (Id_perfil,Nombre,Estado) {
-            var request=$http({
-                method: "POST",
-                url: "http://localhost/SistemaAngular/ws/ModificarPerfil.php",
-                data: {
-                    Id_perfil:Id_perfil,
-                    Nombre: Nombre,
-                    Estado: Estado
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-        }
+            $scope.CambioEstadoOpcion=function (Id_opcion,Estado) {
+                if(Estado==1){
+                    Estado=0;
+                }else {
+                    Estado=1;
+                }
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/CambioEstadoOpcion.php",
+                    data: {
+                        Id_opcion:Id_opcion,
+                        Estado: Estado
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+
+            }
+            $scope.nuevoPerfil=function (Nombre,Estado) {
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/NuevoPerfil.php",
+                    data: {
+                        Nombre: Nombre,
+                        Estado: Estado
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+            }
+            $scope.nuevaRelacion=function (Id_opcion,Id_perfil) {
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/NuevaRelacion.php",
+                    data: {
+                        Id_opcion: Id_opcion,
+                        Id_perfil: Id_perfil
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+
+            }
+            $scope.getRelacion=function () {
+                var request=$http.get(
+                    "http://localhost/SistemaAngular/ws/relaciones.php")
+                request.success(function (data) {
+                    $scope.relacion=data.DATOSRELACION;
+                    console.log('data' + $scope.relacion);
+                })
+            }
+            $scope.CambioEstadoPerfil=function (Id_perfil,Estado){
+                    console.log(Id_perfil+Estado);
+                if(Estado==1){
+                    Estado=0;
+                }else {
+                    Estado=1;
+                }
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/CambioEstadoPerfil.php",
+                    data: {
+                        Id_perfil:Id_perfil,
+                        Estado: Estado
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+
+            }
+            $scope.ModificarPerfil=function (Id_perfil,Nombre,Estado) {
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/ModificarPerfil.php",
+                    data: {
+                        Id_perfil:Id_perfil,
+                        Nombre: Nombre,
+                        Estado: Estado
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+                $window.location.reload();
+            }
+            $scope.getUsuario=function () {
+                var request=$http.get(
+                    "http://localhost/SistemaAngular/ws/sesionlog.php")
+                request.success(function (data) {
+                    $scope.usuario=data.DATOSSESION[0].Id_usuario;
+                    console.log('data  ' + $scope.usuario);
+                    requestima = $http({
+                        method: "POST",
+                        url: "http://localhost/SistemaAngular/ws/imagenesUsuario.php",
+                        data: {
+                            Id_usuario: $scope.usuario
+                        },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    })
+                    console.log('data3  ' + $scope.usuario);
+                    requestima.success(function (data) {
+                        $scope.imag=data.DATOSIMAGEN;
+                        console.log('data' + $scope.imag);
+                    })
+                })
+
+            }
+            $scope.carrusel=function (show) {
+                $scope.carrusel=show;
+            }
+            $scope.uploadFile = function(Direccion,Estado,Id_usuario){
+                var name = $scope.name;
+                var file = $scope.file;
+                upload.uploadFile(file, name).then(function(res){
+                    console.log(res);
+                });
+                console.log(Direccion + Estado + Id_usuario);
+                var request = $http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/subirArchivos.php",
+                    data: {
+                        Direccion: Direccion,
+                        Estado: Estado,
+                        Id_usuario: Id_usuario
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+                $window.location.reload();
+            }
+            $scope.deletFile=function(Id_imagen,Estado,Id_usuario){
+                console.log("prueba" +Id_imagen + Estado + Id_usuario);
+                var request=$http({
+                    method: "POST",
+                    url: "http://localhost/SistemaAngular/ws/eliminarArchivos.php",
+                    data: {
+                        Id_imagen:Id_imagen,
+                        Estado: Estado,
+                        Id_usuario: Id_usuario
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                })
+                $window.location.reload();
+            }
     })
     .directive('uploaderModel', ["$parse", function ($parse) {
         return {
@@ -249,7 +394,7 @@ angular.module('app',[])
             var formData = new FormData();
             formData.append("name", name);
             formData.append("file", file);
-            return $http.post("ws/moverArchivos.php", formData, {
+            return $http.post("../ws/moverArchivos.php", formData, {
                 headers: {
                     "Content-type": undefined
                 },

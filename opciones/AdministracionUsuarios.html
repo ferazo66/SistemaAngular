@@ -11,9 +11,63 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../controller.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Anaheim);
+
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            box-sizing: border-box;
+        }
+        *:before,
+        *:after{
+            box-sizing: border-box;
+        }
+        html,
+        body{
+            min-height: 100%;
+        }
+        body{
+            background-image: radial-gradient(#7ed3bb 0%, rgba(208, 251, 255, 0) 100%);
+        }
+    </style>
 </head>
-<body ng-controller="ControllerUsuarios"  ng-init="AdminUsuarios()"ng-init="getPerfil()">
+<body ng-controller="ControllerUsuarios"  ng-init="AdminUsuarios()" >
+<br>
+<br>
 <h1 class="text-center">Administracion de Usuarios</h1>
+
+<div class="navbar-wrapper" ng-init="navbarpaginas()">
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href=" ">Inicio</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav"  ng-show="mostarNavBar">
+                        <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre=='0'"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
+                                class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre" onclick="window.close()">{{hijos.Opcion}}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                    </ul>
+                    <a class="navbar-brand"  href="/SistemaAngular/opciones/index.html"onclick="window.close()">Salir</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 <div class="container" >
     <table class="table" class="text-center">
         <tr>
@@ -44,14 +98,14 @@
                             <div class="modal-body">
                                 <h3>Modificacion de Datos</h3>
                                 <label>Nombre</label><br>
-                                <input type="text" name="Nombre"placeholder="{{user.Nombre}}"ng-model="M_Nombre"><br>
+                                <input type="text" name="Nombre"placeholder="{{user.Nombre}}"ng-model="M_Nombre" autofocus ><br>
                                 <label>Usuario</label><br>
-                                <input type="text" name="Usuario"placeholder="{{user.Usuario}}"ng-model="M_Usuario"><br>
+                                <input type="text" name="Usuario"placeholder="{{user.Usuario}}"ng-model="M_Usuario" ><br>
                                 <label>Contraseña</label><br>
                                 <input type="text" name="Password"placeholder="{{user.Contrasena}}"ng-model="M_Password"><br>
                                 <label>Perfil</label><br>
                                 <select ng-model="perfil" ng-click="recargar(perfil)" >
-                                    <option value=" {{user.Id_perfil}}" selected="selected">Seleccione el Perfil</option>
+                                    <option value=" {{user.Id_perfil}}" selected="selected" rerquired>Seleccione el Perfil</option>
                                     <option ng-repeat="x in perf" value="{{x.Id_perfil}}">{{x.Nombre}}</option>
                                 </select>
                             </div>
@@ -61,9 +115,11 @@
                             </div>
                         </div>
                     </div>
+                    <div  ng-show="correctact==true"class="alert alert-success">Usuario Actualizado exitosamente</div>
                 </div>
             </td>
-            <td ><button type="button" class="btn btn-danger btn-xs" ng-show="user.Estado==1" ng-click="CambioEstado(user.Id_usuario,user.Estado)">Desactivar </button>
+            <td >
+                <button type="button" class="btn btn-danger btn-xs" ng-show="user.Estado==1" ng-click="CambioEstado(user.Id_usuario,user.Estado)">Desactivar </button>
                 <button type="button" class="btn btn-warning btn-xs" ng-show="user.Estado==0" ng-click="CambioEstado(user.Id_usuario,user.Estado)">Activar</button>
             </td>
         </tr>
@@ -80,25 +136,25 @@
                 <div class="modal-body">
                     <h3>Ingrese los Datos</h3>
                     <label>Nombre</label><br>
-                    <input type="text" name="nombre"ng-model="A_Nombre"><br>
+                    <input type="text" name="nombre"ng-model="A_Nombre" autofocus ><br>
                     <label>Usuario</label><br>
                     <input type="text" name="Usuario"ng-model="A_Usuario"><br>
                     <label>Contraseña</label><br>
                     <input type="text" name="Password"ng-model="A_Password"><br>
                     <label>Perfil</label><br>
                     <select ng-model="perfil" ng-click="recargar(perfil)" >
-                        <option value="" selected="selected">Seleccione el Perfil  </option>
+                        <option value="" selected="selected"required>Seleccione el Perfil  </option>
                         <option ng-repeat="x in perf" value="{{x.Id_perfil}}">{{x.Nombre}}</option>
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevoUsuario(A_Nombre,A_Usuario,A_Password,'1')">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevoUsuario(A_Nombre,A_Usuario,A_Password,'0')">Guardar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-
+    <div  ng-show="correctcrea==true"class="alert alert-success">Usuario creado exitosamente</div>
 </div>
 </body>
 </html>

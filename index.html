@@ -10,8 +10,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="controller.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Anaheim);
+
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            box-sizing: border-box;
+        }
+        *:before,
+        *:after{
+            box-sizing: border-box;
+        }
+        html,
+        body{
+            min-height: 100%;
+        }
+        body{
+            background-image: radial-gradient(#7ed3bb 0%, rgba(208, 251, 255, 0) 100%);
+        }    </style>
 </head>
-<body ng-controller="ControllerUsuarios" class="text-center" >
+<body ng-controller="ControllerUsuarios" class="text-center">
+<div  ng-show="correctLog==true"class="alert alert-success">Bienvenido al Sistema</div>
 <div class="navbar-wrapper">
     <div class="container-fluid">
         <nav class="navbar navbar-fixed-top">
@@ -24,42 +46,40 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href=" ">Inicio</a>
-
                 </div>
-                <div id="navbar" class="navbar-collapse collapse" >
+                <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav"  ng-show="mostarNavBar">
                         <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre=='0'"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
                                 class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre">{{hijos.Opcion}}</a></li>
+                                <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre"onclick="window.close()">{{hijos.Opcion}}</a></li>
                             </ul>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav pull-right">
                     </ul>
-                    <a class="navbar-brand" href="#" ng-click="showOpciones(true)">Login</a>
+                    <a class="navbar-brand" href="#" ng-click="showOpciones(true)">Inicio de Sesion</a>
                 </div>
             </div>
         </nav>
     </div>
 </div>
+<?php
+?>
 <br>
 <br>
-
 <div ng-show="mostarlogin">
-    <form action="checklogin.php" method="post" >
+    <form action="checklogin.php" method="post" required>
         <label>Nombre Usuario:</label><br>
-        <input ng-model="username" name="username" type="text" id="username" required>
+        <input ng-model="username" name="username" type="text" id="username" autofocus >
         <br><br>
         <label>Password:</label><br>
-        <input ng-model="password" name="password" type="password" id="password" required>
+        <input ng-model="password" name="password" type="password" id="password" >
         <br><br>
         <input type="button" name="Submit" value="Ingresar" ng-click="usuariologin(username,password)">
     </form>
+    <div  ng-show="errorLog==true" class="alert alert-danger">Error!! Usuario y contraseña incorrectos</div>
+    <div  ng-show="correctLog==true"class="alert alert-success">Bienvenido al Sistema</div>
 </div>
-
-<section id="prueba" ng-show="">
-
-</section>
 </body>
 </html>

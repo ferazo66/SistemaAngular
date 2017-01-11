@@ -45,6 +45,11 @@ CREATE TABLE relacion (
     FOREIGN KEY (Id_perfil)
         REFERENCES Perfiles (Id_perfil)
 );
+CREATE TABLE sesion (
+    Id_sesion INT AUTO_INCREMENT NOT NULL,
+    Id_usuario INT,
+    PRIMARY KEY (Id_sesion)
+);
 INSERT INTO menus
 values (1,"Menu Imagenes",1,null,null);
 INSERT INTO menus
@@ -87,5 +92,7 @@ insert into relacion
 values(6,4,2);
 insert into relacion
 values(7,5,2);
+insert into sesion
+values(1,1);
 
  

@@ -11,9 +11,62 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../controller.js"></script>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Anaheim);
+
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            box-sizing: border-box;
+        }
+        *:before,
+        *:after{
+            box-sizing: border-box;
+        }
+        html,
+        body{
+            min-height: 100%;
+        }
+        body{
+            background-image: radial-gradient(#7ed3bb 0%, rgba(208, 251, 255, 0) 100%);
+        }
+    </style>
 </head>
 <body ng-controller="ControllerUsuarios" ng-init="getPerfil()" >
+<br>
+<br>
 <h1 class="text-center">Administracion de Perfiles</h1>
+<div class="navbar-wrapper" ng-init="navbarpaginas()">
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href=" ">Inicio</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav"  ng-show="mostarNavBar">
+                        <li class=" dropdown" ng-repeat="opciones in navBar" ng-show="opciones.Padre==''|| opcion.Padre=='0'"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{opciones.Opcion}} <span
+                                class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/SistemaAngular/opciones/{{hijos.Url}}" target="_blank" ng-repeat="hijos in navBar" ng-show="opciones.Id_opcion==hijos.Padre"onclick="window.close()">{{hijos.Opcion}}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                    </ul>
+                    <a class="navbar-brand" href="/SistemaAngular/opciones/index.html"onclick="window.close()">Salir</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 <div class="container">
     <table class="table" class="text-center"ng-init="getRelacion()">
         <tr>
@@ -38,7 +91,7 @@
                             <div class="modal-body">
                                 <h3>Modificar Perfiles</h3>
                                 <label>Opcion</label><br>
-                                <input type="text" name="Nombre"placeholder="{{perfil.Nombre}}"ng-model="M_Perfil"><br>
+                                <input type="text" name="Nombre"placeholder="{{perfil.Nombre}}"ng-model="M_Perfil"autofocus><br>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ModificarPerfil(perfil.Id_perfil,M_Perfil,perfil.Estado)" >Actualizar</button>
@@ -54,7 +107,7 @@
             </td>
         </tr>
     </table>
-    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalAgregar" ng-click="getPerfil()">Agregar Opciones</button>
+    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalAgregar" ng-click="getPerfil()">Nuevo Perfil</button>
     <div class="modal fade" id="modalAgregar" role="dialog">
         <div class="modal-dialog" class="">
             <!-- Modal content-->
@@ -65,23 +118,11 @@
                 </div>
                 <div class="modal-body">
                     <h3>Ingrese los Datos</h3>
-                    <label>Opcion</label><br>
-                    <input type="text" name="nombre"ng-model="A_Opcion"><br>
-                    <label>Ubicacion</label><br>
-                    <input type="text" name="Usuario"ng-model="A_Ubicacion"><br>
-                    <form>
-                        Es Padre:
-                        <input type="radio" ng-model="opciones" value="1">Si
-                        <input type="radio" ng-model="opciones" value="2">No
-                    </form>
-                    <label ng-show="opciones==2" >Menu Hijos</label><br>
-                    <select ng-model="opciones1"ng-show="opciones==2" >
-                        <option value=" " selected="selected">Seleccione el Padre</option>
-                        <option ng-repeat="x in menus" value="{{x.Id_opcion}}"ng-show="x.Padre==''|| x.Padre==0">{{x.Opcion}}</option>
-                    </select>
+                    <label>Nombre del Perfil</label><br>
+                    <input type="text" name="nombre"ng-model="A_perfil"autofocus><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevaOpcion(A_Opcion,'1',opciones,opciones1,A_Ubicacion)">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="nuevoPerfil(A_perfil,'1')">Guardar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
                 </div>
             </div>
