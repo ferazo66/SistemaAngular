@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+jar {
+    baseName = 'base-ws'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.apache.httpcomponents:httpclient:4.5.2")
+}
+

@@ -1,0 +1,6 @@
+rootProject.name = 'base-root'
+include ':base-ws'
+include ':base-modelo'
+
+project(':base-modelo').projectDir = "$rootDir/base-modelo" as File
+project(':base-ws').projectDir = "$rootDir/base-ws" as File

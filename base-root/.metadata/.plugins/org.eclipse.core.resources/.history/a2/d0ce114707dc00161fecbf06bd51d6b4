@@ -1,0 +1,8 @@
+package ws;
+import java.io.Serializable;
+public class hibermate implements Serializable{
+	private static final long serialVersionUID=1L;
+	private String id;
+	private String nombre;
+
+}

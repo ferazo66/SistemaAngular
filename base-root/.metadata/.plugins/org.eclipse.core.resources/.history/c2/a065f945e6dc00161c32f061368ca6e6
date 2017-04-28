@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+       
+    }
+}
+apply plugin: 'org.springframework.boot'
+jar {
+    baseName = 'base-modelo'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+apply plugin: 'eclipse'
+apply plugin: 'java'
+
+
+dependencies {
+	compile group: 'org.springframework', name: 'spring-web', version: '3.0.4.RELEASE'
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '4.3.6.Final'
+	compile group: 'org.springframework', name: 'spring-jdbc', version: '2.0.6'
+	compile group: 'org.springframework', name: 'spring-orm', version: '4.0.3.RELEASE'
+	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.2.2'
+	compile group: 'javax.transaction', name: 'javax.transaction-api', version: '1.2'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.31'
+	
+	compile("org.springframework.boot:spring-boot-starter-web")
+  
+}
+

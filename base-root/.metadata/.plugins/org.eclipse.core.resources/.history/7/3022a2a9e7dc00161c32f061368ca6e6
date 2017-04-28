@@ -1,0 +1,20 @@
+package person;
+
+import org.hibernate.Session;
+
+import gestor.BaseGestor;
+
+public class TestMain {
+  public static void main(String[] args) {
+	 Person person = new Person();
+//	 person.setName("eduardo");
+	 Session session = HibernateUtil.getSessionFactory().openSession();
+	 session.beginTransaction();
+//	 session.save(person);
+//	 session.getTransaction().commit();
+	 BaseGestor hql= new BaseGestor();
+	 hql.consultaPersona();	 
+	 session.close();
+	 System.out.println("Done");
+  }
+} 

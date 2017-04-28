@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;gs-rest-service-cors&apos;" deleteContents="true" description="Delete resource &apos;gs-rest-service-cors&apos;" element1="/gs-rest-service-cors" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1484679558459"/>&#x0A;<refactoring comment="Delete resource &apos;gs-rest-service-cors&apos;" deleteContents="false" description="Delete resource &apos;gs-rest-service-cors&apos;" element1="/gs-rest-service-cors" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1484679574479"/>
+</session>
